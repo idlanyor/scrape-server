@@ -1,0 +1,23 @@
+<div class="endpoint-card bg-rgb-secondary p-6 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 hover:bg-opacity-80">
+    <div class="flex items-center space-x-3 mb-4">
+        <div class="w-10 h-10 rounded-full <%= endpoint.bgColor %> flex items-center justify-center">
+            <%- include(`../icons/${endpoint.icon}`) %>
+        </div>
+        <h3 class="text-xl font-semibold"><%= endpoint.name %></h3>
+    </div>
+    <div class="space-y-3">
+        <div class="flex items-center space-x-2">
+            <span class="px-2 py-1 bg-green-500 text-xs rounded-full">GET</span>
+            <code class="text-sm text-gray-300"><%= endpoint.path %></code>
+        </div>
+        <p class="text-sm text-gray-400"><%= endpoint.description %></p>
+        <% if (endpoint.params && endpoint.params.length > 0) { %>
+        <div class="text-xs text-gray-500">
+            <p class="font-medium">Parameter:</p>
+            <% endpoint.params.forEach(param => { %>
+            <p><%= param.name %> (required) - <%= param.description %></p>
+            <% }); %>
+        </div>
+        <% } %>
+    </div>
+</div> 
