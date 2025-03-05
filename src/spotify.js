@@ -53,11 +53,26 @@ export const spotifyDownload = async (url) => {
       return { title, artist, coverImage, downloadMp3 };
     });
 
-
     await browser.close();
-    return data;
-  } catch (e) {
-    throw new Error('Gagal Cik, ', e.message)
+    
+    return {
+      status: true,
+      message: "Success scraping Spotify track",
+      data: {
+        title: data.title,
+        artist: data.artist,
+        coverImage: data.coverImage,
+        downloadUrl: data.downloadMp3
+      },
+      error: null
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: "Failed to scrape Spotify track",
+      data: null,
+      error: error.message
+    };
   }
 };
 

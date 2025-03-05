@@ -15,7 +15,6 @@ export const ytMp3 = async (url) => {
         const command = `yt-dlp -v --extract-audio --audio-format mp3 --output "${outputTemplate}" ${url}`;
 
         const { stdout, stderr } = await execAsync(command);
-        console.log('stdout:', stdout); // For debugging
 
         // Look for the converted output file in the stdout
         const filenameMatch = stdout.match(/\[ExtractAudio\] Destination: (.+\.mp3)/i) || 
@@ -26,13 +25,22 @@ export const ytMp3 = async (url) => {
             // Try to find any .mp3 file mentioned in the output
             const mp3Match = stdout.match(/[^\s]+\.mp3/);
             if (!mp3Match) {
-                throw new Error('Could not extract filename from output');
+                return {
+                    status: false,
+                    message: "Could not extract filename from output",
+                    data: null,
+                    error: "File extraction failed"
+                };
             }
+            const baseFilename = path.basename(mp3Match[0]);
             return {
-                success: true,
-                message: 'Audio extracted successfully',
-                filename: path.basename(mp3Match[0]),
-                downloadUrl: `/downloads/${path.basename(mp3Match[0])}`
+                status: true,
+                message: "Audio extracted successfully",
+                data: {
+                    filename: baseFilename,
+                    downloadUrl: `/downloads/${baseFilename}`
+                },
+                error: null
             };
         }
 
@@ -41,13 +49,20 @@ export const ytMp3 = async (url) => {
         const downloadUrl = `/downloads/${baseFilename}`;
 
         return {
-            success: true,
-            message: 'Audio extracted successfully',
-            filename: baseFilename,
-            downloadUrl
+            status: true,
+            message: "Audio extracted successfully",
+            data: {
+                filename: baseFilename,
+                downloadUrl: downloadUrl
+            },
+            error: null
         };
     } catch (error) {
-        console.error('Full error:', error);
-        throw new Error(`Failed to download: ${error.message}`);
+        return {
+            status: false,
+            message: "Failed to download and convert YouTube audio",
+            data: null,
+            error: error.message
+        };
     }
 };

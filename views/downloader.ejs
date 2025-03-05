@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Downloader | Kanata Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rgb-primary': '#2E3440',
+                        'rgb-secondary': '#3B4252',
+                        'rgb-accent': '#88C0D0',
+                        'rgb-text': '#ECEFF4'
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif']
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-rgb-primary text-rgb-text font-poppins min-h-screen">
+    <!-- Header -->
+    <header class="bg-rgb-secondary shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <nav class="flex justify-between items-center">
+                <a href="/" class="text-2xl font-bold text-rgb-accent">Kanata Downloader</a>
+                <div class="flex space-x-4">
+                    <a href="/" class="text-rgb-text hover:text-rgb-accent transition-colors">Rest API</a>
+                    <a href="https://github.com/idlanyor/kanata-reborn"
+                        class="text-rgb-text hover:text-rgb-accent transition-colors">GitHub</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <h1
+                    class="text-4xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">
+                    Kanata Downloader
+                </h1>
+                <p class="text-gray-400">Unduh video dari YouTube, Instagram, Facebook, TikTok, dan platform
+                    lainnya</p>
+            </div>
+
+            <!-- Download Form -->
+            <div class="bg-rgb-secondary p-6 rounded-xl shadow-xl">
+                <div class="mb-6">
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <button onclick="setActiveTab('youtube')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors active bg-rgb-primary text-rgb-accent">
+                            YouTube Video
+                        </button>
+                        <button onclick="setActiveTab('ytmp3')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            YouTube MP3
+                        </button>
+                        <button onclick="setActiveTab('instagram')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            Instagram
+                        </button>
+                        <button onclick="setActiveTab('tiktok')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            TikTok
+                        </button>
+                        <button onclick="setActiveTab('facebook')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            Facebook
+                        </button>
+                        <button onclick="setActiveTab('spotify')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            Spotify
+                        </button>
+                        <button onclick="setActiveTab('threads')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            Threads
+                        </button>
+                        <button onclick="setActiveTab('capcut')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            CapCut
+                        </button>
+                        <button onclick="setActiveTab('rednote')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            RedNote
+                        </button>
+                        <button onclick="setActiveTab('mediafire')"
+                            class="tab-btn px-4 py-2 rounded-lg hover:bg-rgb-primary hover:text-rgb-accent transition-colors">
+                            Mediafire
+                        </button>
+                    </div>
+
+                    <form id="downloadForm" class="space-y-4">
+                        <div class="flex gap-4">
+                            <input type="text" id="urlInput" placeholder="Tempel URL video di sini..."
+                                class="flex-1 px-4 py-3 bg-rgb-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-rgb-accent text-rgb-text">
+                            <button type="submit"
+                                class="bg-rgb-accent text-rgb-primary px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Download
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result Section -->
+                <div id="resultSection" class="hidden">
+                    <div class="border-t border-gray-700 pt-6">
+                        <div class="bg-rgb-primary rounded-lg p-4">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div>
+                                    <h3 id="videoTitle" class="text-lg font-semibold text-rgb-accent"></h3>
+                                    <p id="videoAuthor" class="text-gray-400"></p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div id="downloadOptions" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <!-- Download options will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="hidden">
+                    <div class="flex items-center justify-center py-8">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-rgb-accent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-rgb-secondary mt-12">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+            <p>&copy; <%= new Date().getFullYear() %> Media Downloader. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Import JavaScript modules -->
+    <script type="module" src="/js/config.js"></script>
+    <script type="module" src="/js/tabs.js"></script>
+    <script type="module" src="/js/validator.js"></script>
+    <script type="module" src="/js/downloader.js"></script>
+    <script type="module" src="/js/main.js"></script>
+</body>
+
+</html>

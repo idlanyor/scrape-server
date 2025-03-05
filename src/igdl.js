@@ -45,29 +45,47 @@ export const igDl = async (url) => {
         await page.waitForSelector(resultSelector, { visible: true });
 
         const data = await page.evaluate(() => {
-            const results = [];
-            document.querySelectorAll("#search-result .download-items").forEach((item) => {
-                const thumbnail = item.querySelector(".download-items__thumb img")?.src || null;
-                const videoLink = item.querySelector(".download-items__btn a[title='Download Video']")?.href || null;
-                const imageLink = item.querySelector(".download-items__btn a[title='Download Thumbnail']")?.href || null;
+            const item = document.querySelector("#search-result .download-items");
+            if (!item) return null;
 
-                results.push({ thumbnail, videoLink, imageLink });
-            });
-            return results;
+            const thumbnail = item.querySelector(".download-items__thumb img")?.src || null;
+            const videoLink = item.querySelector(".download-items__btn a[title='Download Video']")?.href || null;
+            const imageLink = item.querySelector(".download-items__btn a[title='Download Thumbnail']")?.href || null;
+
+            return { thumbnail, videoLink, imageLink };
         });
 
-
-
         await browser.close();
-        // console.log(data);
-        return data;
+        
+        if (!data) {
+            return {
+                status: false,
+                message: "No content found for the given Instagram URL",
+                data: null,
+                error: "Content not found"
+            };
+        }
+
+        return {
+            status: true,
+            message: "Success scraping Instagram content",
+            data: {
+                thumbnail: data.thumbnail,
+                videoUrl: data.videoLink,
+                imageUrl: data.imageLink
+            },
+            error: null
+        };
     } catch (error) {
-        throw error
-        // throw new Error('Terjadi error saat scraping:', error)
+        return {
+            status: false,
+            message: "Failed to scrape Instagram content",
+            data: null,
+            error: error.message
+        };
     }
 };
 
-(async () => {
-    await igDl('https://www.instagram.com/reel/DF4oOlavxSq/?igsh=MWRxMDF1N3Z6dnl4OQ==')
-})()
-
+// (async () => {
+//     await igDl('https://www.instagram.com/reel/DF4oOlavxSq/?igsh=MWRxMDF1N3Z6dnl4OQ==')
+// })()

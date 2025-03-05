@@ -52,9 +52,25 @@ export const tiktokDl = async (url) => {
         const caption = await page.$eval('.splash-video p', el => el.textContent.trim());
 
         await browser.close();
-        return { caption, author, video, audio };
+        
+        return {
+            status: true,
+            message: "Success scraping TikTok video",
+            data: {
+                author,
+                caption,
+                video,
+                audio
+            },
+            error: null
+        };
     } catch (error) {
-        throw new Error('Terjadi error saat scraping:', error)
+        return {
+            status: false,
+            message: "Failed to scrape TikTok video",
+            data: null,
+            error: error.message
+        };
     }
 };
 
