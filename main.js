@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import downloaderRouter from './routes/downloader.js';
 
 import {
     capcutDl,
@@ -42,7 +41,6 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/downloads', express.static(path.join(__dirname, 'public/downloads')));
-app.use('/dl', downloaderRouter);
 
 // Routes
 app.get('/', (req, res) => {
