@@ -90,7 +90,7 @@ const validateQuery = (req, res) => {
 };
 
 // YouTube Video endpoint
-app.get('/api/youtube', async (req, res) => {
+app.get('/api/ytvideo', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
         const result = await ytVideo(req.query.url);
