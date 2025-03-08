@@ -2,10 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 import {
     capcutDl,
-    fbdl,
+    fbdl, 
     igDl,
     memberJkt,
     detailMember,
@@ -23,6 +22,7 @@ import {
     ytVideo
 } from './src/index.js';
 import { endpoints } from './endpoints.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -30,7 +30,10 @@ const app = express();
 const port = process.env.PORT || 8002;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -89,7 +92,8 @@ const validateQuery = (req, res) => {
     return true;
 };
 
-// YouTube Video endpoint
+// API Endpoints
+// YouTube
 app.get('/api/ytvideo', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -100,7 +104,6 @@ app.get('/api/ytvideo', async (req, res) => {
     }
 });
 
-// YouTube MP3 endpoint
 app.get('/api/ytmp3', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -111,7 +114,7 @@ app.get('/api/ytmp3', async (req, res) => {
     }
 });
 
-// Instagram endpoint
+// Social Media
 app.get('/api/instagram', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -122,7 +125,6 @@ app.get('/api/instagram', async (req, res) => {
     }
 });
 
-// TikTok endpoint
 app.get('/api/tiktok', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -133,7 +135,6 @@ app.get('/api/tiktok', async (req, res) => {
     }
 });
 
-// Facebook endpoint
 app.get('/api/facebook', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -144,7 +145,6 @@ app.get('/api/facebook', async (req, res) => {
     }
 });
 
-// Spotify endpoint
 app.get('/api/spotify', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -155,7 +155,6 @@ app.get('/api/spotify', async (req, res) => {
     }
 });
 
-// Threads endpoint
 app.get('/api/threads', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -166,7 +165,7 @@ app.get('/api/threads', async (req, res) => {
     }
 });
 
-// CapCut endpoint
+// Other Services
 app.get('/api/capcut', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -177,7 +176,6 @@ app.get('/api/capcut', async (req, res) => {
     }
 });
 
-// RedNote endpoint
 app.get('/api/rednote', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -188,7 +186,6 @@ app.get('/api/rednote', async (req, res) => {
     }
 });
 
-// Mediafire endpoint
 app.get('/api/mediafire', async (req, res) => {
     try {
         if (!validateUrl(req, res)) return;
@@ -199,7 +196,7 @@ app.get('/api/mediafire', async (req, res) => {
     }
 });
 
-// Pinterest endpoint
+// Search Services
 app.get('/api/pinterest', async (req, res) => {
     try {
         if (!validateQuery(req, res)) return;
@@ -210,7 +207,6 @@ app.get('/api/pinterest', async (req, res) => {
     }
 });
 
-// Shutterstock endpoint
 app.get('/api/shutterstock', async (req, res) => {
     try {
         if (!validateQuery(req, res)) return;
@@ -221,7 +217,7 @@ app.get('/api/shutterstock', async (req, res) => {
     }
 });
 
-// PDDIKTI Search endpoint
+// PDDIKTI Services
 app.get('/api/pddikti/search', async (req, res) => {
     try {
         if (!validateQuery(req, res)) return;
@@ -232,7 +228,6 @@ app.get('/api/pddikti/search', async (req, res) => {
     }
 });
 
-// PDDIKTI Detail endpoint
 app.get('/api/pddikti/detail', async (req, res) => {
     try {
         const { link } = req.query;
@@ -251,7 +246,7 @@ app.get('/api/pddikti/detail', async (req, res) => {
     }
 });
 
-// JKT48 Members endpoint
+// JKT48 Services
 app.get('/api/jkt48/members', async (req, res) => {
     try {
         const result = await memberJkt();
@@ -261,7 +256,6 @@ app.get('/api/jkt48/members', async (req, res) => {
     }
 });
 
-// JKT48 Member Detail endpoint
 app.get('/api/jkt48/member/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -280,7 +274,7 @@ app.get('/api/jkt48/member/:id', async (req, res) => {
     }
 });
 
-// Murotal MP3 endpoint
+// Religious Services
 app.get('/api/murrotal', async (req, res) => {
     try {
         const result = await getMp3Murotal();
@@ -290,7 +284,7 @@ app.get('/api/murrotal', async (req, res) => {
     }
 });
 
-// Handle 404 Not Found
+// Error Handlers
 app.use((req, res) => {
     res.status(404).json({
         status: false,
